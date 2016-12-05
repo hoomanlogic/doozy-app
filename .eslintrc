@@ -1,0 +1,76 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["flowtype"],
+  "extends": "react-native",
+  "globals": {
+    "__DEV__": true
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jquery": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "arrowFunctions": true,
+      "binaryLiterals": true,
+      "blockBindings": true,
+      "classes": true,
+      "defaultParams": true,
+      "destructuring": true,
+      "experimentalObjectRestSpread": true,
+      "restParams": true,
+      "forOf": true,
+      "generators": true,
+      "modules": false,
+      "objectLiteralComputedProperties": true,
+      "objectLiteralDuplicateProperties": true,
+      "objectLiteralShorthandMethods": true,
+      "objectLiteralShorthandProperties": true,
+      "octalLiterals": true,
+      "regexUFlag": true,
+      "regexYFlag": true,
+      "spread": true,
+      "superInFunctions": true,
+      "templateStrings": true,
+      "unicodeCodePointEscapes": true,
+      "globalReturn": true,
+      "jsx": true
+    }
+  },
+  "rules": {
+    "no-confusing-arrow": 0,
+    "jsx-quotes": [2, "prefer-double"],
+    "eol-last": 1,
+    // Override AirBnB Rules
+    "arrow-body-style": 0,
+    "brace-style": [2, "stroustrup", { "allowSingleLine": true }],
+    "class-methods-use-this": 0,
+    "comma-dangle": 0,
+    "default-case": 0,
+    "func-names": 0,
+    "indent": [2, 3, { "SwitchCase": 1, "VariableDeclarator": 1 }],
+    "max-len": [2, 150],
+    "no-console": 0,
+    "no-nested-ternary": 0,
+    "no-param-reassign": 0,
+    "no-var": 0,
+    "no-use-before-define": 0,
+    "object-shorthand": 0,
+    "one-var": [2, { "uninitialized": "always", "initialized": "never" }],
+    "one-var-declaration-per-line": [2, "initializations"],
+    "new-cap": 0,
+    "prefer-const": 0,
+    "prefer-template": 0,
+    "spaced-comment": [2, "always", { "exceptions": ["*"] }],
+    "space-before-function-paren": [2, { "anonymous": "always", "named": "always" }],
+    "vars-on-top": 0,
+    "react/jsx-indent-props": 0,
+    "react/prop-types": 0,
+    "react/sort-comp": 0,
+    "react/jsx-no-bind": 0
+  }
+}
