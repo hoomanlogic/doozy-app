@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "dev-web": "webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors --quiet",
     "test": "jest",
-    "bundle-android": " react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/"
+    "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/"
   },
   "dependencies": {
     "babel-core": "^6.18.2",
@@ -24,6 +24,8 @@
     "react": "~15.3.2",
     "react-dom": "~15.3.2",
     "react-native": "0.38.0",
+    "react-native-elements": "^0.7.1",
+    "react-native-vector-icons": "^3.0.0",
     "react-native-web": "^0.0.55",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3"
