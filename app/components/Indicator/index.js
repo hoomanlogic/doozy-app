@@ -23,7 +23,7 @@ class Indicator extends Component {
          styles: StyleSheet.create({
             text: {
                ...props.textStyle,
-               color: '#e0e0e0',
+               color: props.theme && props.theme.foreColor ? props.theme.foreColor : '#e0e0e0',
                fontSize: 16,
                textAlign: 'center',
             },
@@ -46,14 +46,14 @@ class Indicator extends Component {
             top: {
                borderTopLeftRadius: 8,
                borderTopRightRadius: 8,
-               backgroundColor: 'rgb(68, 68, 68)',
+               backgroundColor: props.theme.bgColorLow,
                marginBottom: 2,
                minHeight: 4,
             },
             bottom: {
                borderBottomLeftRadius: 8,
                borderBottomRightRadius: 8,
-               backgroundColor: 'rgb(68, 68, 68)',
+               backgroundColor: props.theme.bgColorLow,
                marginTop: 2,
                minHeight: 4,
             }
@@ -64,7 +64,7 @@ class Indicator extends Component {
 * RENDERING
 *************************************************************/
    render () {
-      var { change, compareValue, description, kind, title, value } = this.props;
+      var { change, color, compareValue, description, kind, title, value } = this.props;
       var { styles } = this.state;
 
       var content;

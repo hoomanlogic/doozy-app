@@ -31,7 +31,8 @@ class Today extends Component {
       this.onNotesValueChange = this.onNotesValueChange.bind(this);
 
       this.state = {
-         dataSource: this.getDataSource(props)
+         dataSource: this.getDataSource(props),
+         styles: getStyles(props.theme),
       };
    }
 
@@ -123,6 +124,8 @@ class Today extends Component {
    }
 
    renderRow (rowData:Object) {
+      var { theme } = this.props;
+      var { styles } = this.state;
       var logInput;
       switch (rowData.target.measure) {
          case 'duration':
@@ -163,7 +166,7 @@ class Today extends Component {
                   <Text style={styles.name}>{rowData.target.name}</Text>
                </View>
                <View style={styles.thumbPanel}>
-                  <Indicator value={String(rowData.log ? rowData.progress : rowData.target.target)} kind="simple"/>
+                  <Indicator theme={theme} color={theme.foreColor} value={String(rowData.log ? rowData.progress : rowData.target.target)} kind="simple"/>
                </View>
                {logInput}
                <View style={styles.thumbPanel}>
@@ -178,10 +181,11 @@ class Today extends Component {
    }
 
    renderSeparator (sectionId:number, rowId:number, adjacentRowHighlighted:bool) {
+      var { styles } = this.state;
       return (
          <View
             key={`${sectionId}-${rowId}`}
-            style={separatorStyle(adjacentRowHighlighted)}
+            style={adjacentRowHighlighted ? styles.separatorAdjacent : styles.separator}
          />
       );
    }
@@ -190,44 +194,47 @@ class Today extends Component {
 /***************************************************************
  * STYLING
  **************************************************************/
-function separatorStyle (adjacentRowHighlighted) {
+function separatorStyle (theme, adjacentRowHighlighted) {
    return {
       height: adjacentRowHighlighted ? 4 : 1,
-      backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#111',
+      backgroundColor: theme.bgColorLow,
    };
 }
 
-const textColor = '#E0E0E0';
-const styles = StyleSheet.create({
-   row: {
-      flex: 1,
-      flexDirection: 'row',
-      padding: 8,
-   },
-   row_logged: {
-      flex: 1,
-      flexDirection: 'row',
-      padding: 8,
-      backgroundColor: '#666'
-   },
-   name: {
-      color: textColor,
-      fontWeight: 'bold',
-      textAlign: 'left',
-      fontSize: 16,
-      padding: 4,
-   },
-   thumb: {
-      width: 24,
-      height: 24,
-   },
-   thumbPanel: {
-      padding: 4,
-   },
-   stretchPanel: {
-      flex: 1,
-      padding: 4,
-   }    
-});
+const getStyles = function (theme) {
+   return StyleSheet.create({
+      separator: separatorStyle(theme, false),
+      separatorAdjacent: separatorStyle(theme, true),
+      row: {
+         flex: 1,
+         flexDirection: 'row',
+         padding: 8,
+      },
+      row_logged: {
+         flex: 1,
+         flexDirection: 'row',
+         padding: 8,
+         backgroundColor: theme.bgColorLow
+      },
+      name: {
+         color: theme.foreColor,
+         fontWeight: 'bold',
+         textAlign: 'left',
+         fontSize: 16,
+         padding: 4,
+      },
+      thumb: {
+         width: 24,
+         height: 24,
+      },
+      thumbPanel: {
+         padding: 4,
+      },
+      stretchPanel: {
+         flex: 1,
+         padding: 4,
+      }    
+   });
+};
 
 export default Today;

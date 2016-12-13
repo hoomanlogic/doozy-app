@@ -10,10 +10,13 @@ import {
    Dimensions,
    ProgressBarAndroid,
    StyleSheet,
-   ToolbarAndroid,
    View
 } from 'react-native';
+import {
+   Tabs, Tab, Icon
+} from 'react-native-elements';
 import Today from './app/Today';
+import Routines from './app/Routines';
 import firebase from 'firebase';
 
 // Initialize Firebase
@@ -40,6 +43,9 @@ export default class doozy extends Component {
       this.todayRef = firebase.database().ref('data/users/geoffreyfloyd/logs/' + (new Date).toISOString().slice(0, 10));
 
       this.state = {
+         selectedTab: 'today',
+         styles: getStyles(themes.lightTheme),
+         theme: themes.lightTheme,
          dimensions
       };
    }
@@ -85,9 +91,16 @@ export default class doozy extends Component {
       });
    }
 
+   changeTab (selectedTab) {
+      this.setState({ selectedTab });
+   }
 
    render () {
-      var { dimensions, focuses, programs, targets, today, user } = this.state;
+      var { dimensions, focuses, programs, selectedTab, styles, targets, theme, today, user } = this.state;
+      var isTabToday = selectedTab === 'today';
+      var renderTodayIcon = () => <Icon name="whatshot" size={26}/>;
+      var isTabRoutines = selectedTab === 'routines';
+      var renderRoutinesIcon = () => <Icon name="subscriptions" size={26}/>; // playlist-play
 
       if (!focuses || !targets || !programs || !user) {
          return this.renderLoadingIndicator();
@@ -95,16 +108,54 @@ export default class doozy extends Component {
 
       return (
          <View style={styles.container} onLayout={event => this.setState({ dimensions: event.nativeEvent.layout })}>
-            <ToolbarAndroid
-               style={styles.toolbar}
-               title={'Today'}
-               />
-            <Today style={styles.content} todayRef={this.todayRef} today={today} dimensions={dimensions} focuses={focuses} programs={programs} targets={targets} user={user} />
+            <Tabs
+               tabBarStyle={styles.tabBar}
+            >
+               <Tab
+                  onPress={() => this.changeTab('today')}
+                  renderIcon={renderTodayIcon}
+                  renderSelectedIcon={renderTodayIcon}
+                  selected={isTabToday}
+                  title={isTabToday ? 'TODAY' : null}
+               >
+                  <Today
+                     style={styles.content}
+                     theme={theme}
+                     todayRef={this.todayRef}
+                     today={today}
+                     dimensions={dimensions}
+                     focuses={focuses}
+                     programs={programs}
+                     targets={targets}
+                     user={user}
+                  />
+               </Tab>
+               <Tab
+                  onPress={() => this.changeTab('routines')}
+                  renderIcon={renderRoutinesIcon}
+                  renderSelectedIcon={renderRoutinesIcon}
+                  selected={isTabRoutines}
+                  title={isTabRoutines ? 'ROUTINES' : null}
+               >
+                  <Routines
+                     style={styles.content}
+                     theme={theme}
+                     todayRef={this.todayRef}
+                     today={today}
+                     dimensions={dimensions}
+                     focuses={focuses}
+                     programs={programs}
+                     targets={targets}
+                     user={user}
+                  />
+               </Tab>               
+            </Tabs>
          </View>
       );
    }
 
    renderLoadingIndicator () {
+      var { styles } = this.state;
       return (
          <View style={styles.loadingContainer}>
             <ProgressBarAndroid styleAttr="Large" />
@@ -112,26 +163,46 @@ export default class doozy extends Component {
       );
    }
 }
-const contentBackground = '#231f1f'; // 231f1f
-const toolbarBackground = '#999999'; // f6f5f5
 
-const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: contentBackground,
+const themes = {
+   darkTheme: {
+      bgColor: '#231f1f',  
+      bgColorHigh: '#111', // Greater magnitude of contrast
+      bgColorLow: '#444', // Lesser magnitude of contrast
+      foreColor: '#E0E0E0',
+      foreColorHigh: '#FFF', // Greater magnitude of contrast
+      foreColorLow: '#BBB', // Lesser magnitude of contrast
    },
-   content: {
-      flex: 1,
-   },
-   loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      backgroundColor: contentBackground,
-   },
-   toolbar: {
-      height: 56,
-      backgroundColor: toolbarBackground
+   lightTheme: {
+      bgColor: '#E0E0E0',
+      bgColorHigh: '#FFF', // Greater magnitude of contrast
+      bgColorLow: '#BBB', // Lesser magnitude of contrast
+      foreColor: '#231f1f',
+      foreColorHigh: '#111', // Greater magnitude of contrast
+      foreColorLow: '#999', // Lesser magnitude of contrast
    }
-});
+};
+
+const noBackground = 'transparent';
+const getStyles = function (theme) {
+   return StyleSheet.create({
+      container: {
+         flex: 1,
+         backgroundColor: theme.bgColor,
+      },
+      content: {
+         flex: 1,
+      },
+      loadingContainer: {
+         flex: 1,
+         justifyContent: 'center',
+         backgroundColor: theme.bgColor,
+      },
+      tabBar: {
+         marginLeft: 0,
+         backgroundColor: theme.bgColorLow,
+      },
+   });
+};
 
 AppRegistry.registerComponent('doozy', () => doozy);
