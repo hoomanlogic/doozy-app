@@ -1,6 +1,6 @@
 // PACKAGES
 import React from 'react';
-import Pie from '../Pie';
+import Pie from 'doozy/src/components/Pie';
 
 const HourDuration = function (props) {
    var { bgColor, fillColor, minutes, radius, tickColor, onClick } = props;

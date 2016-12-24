@@ -12,8 +12,8 @@ import {
     View,
     ListView
 } from 'react-native';
-import DurationInput from '../components/DurationInput';
-import Indicator from '../components/Indicator';
+import DurationInput from 'app/components/DurationInput';
+import Indicator from 'app/components/Indicator';
 
 // Resolve image sources for web or mobile
 var imageSource = require('../../images/activity.png');

@@ -1,6 +1,6 @@
 // PACKAGES
 import React from 'react';
-import HourDuration from '../HourDuration';
+import HourDuration from 'doozy/src/components/HourDuration';
 
 class DurationInput extends React.Component {
    constructor (props) {

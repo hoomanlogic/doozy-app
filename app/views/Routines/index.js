@@ -1,29 +1,84 @@
 // @flow
 import React, { Component } from 'react';
 import {
-    ScrollView,
-    StyleSheet,
-    View
+   ScrollView,
+   StyleSheet,
+   View
 } from 'react-native';
 import {
    Icon,
    List,
-   ListItem   
+   ListItem
 } from 'react-native-elements';
+import Loading from 'doozy/app/components/Loading';
 
 class Routines extends Component {
+   /******************************************
+    * COMPONENT LIFECYCLE
+    *****************************************/
    constructor (props) {
       super(props);
       this.state = {
+         lists: null,
          styles: getStyles(props.theme),
       };
    }
 
+   componentDidMount () {
+      // Create lists object if it doesn't yet exist
+      this.props.userRef.child('lists').transaction(currentValue => {
+         if (currentValue === null) {
+            return {
+               active: {
+                  'morning-routine': {
+                     name: 'Morning Routine',
+                     icon: 'http://pngimg.com/upload/sun_PNG13449.png',
+                  }
+               },
+               archive: {},
+            };
+         }
+      }, error => console.log(error));
+      this.listenForArrayData('lists', this.props.userRef.child('lists/active'));
+   }
+
    /***************************************************************
-    * CALCULATIONS
+    * EVENT HANDLING
     **************************************************************/
-   pressRow (row:Object) {
+   pressRow (row: Object) {
       console.log(row);
+   }
+
+   /******************************************
+    * METHODS
+    *****************************************/
+   listenForArrayData (key, ref) {
+      ref.on('value', (snap) => {
+         // Get children as an array
+         var items = [];
+         snap.forEach((child) => {
+            var childObj = child.val();
+            childObj.id = child.key;
+            items.push(childObj);
+         });
+
+         // Update state
+         var newState = {};
+         newState[key] = items;
+         this.setState(newState);
+      });
+   }
+
+   listenForObjectMapData (key, ref) {
+      ref.on('value', (snap) => {
+         // Get value as an object
+         var obj = snap.val();
+
+         // Update state
+         var newState = {};
+         newState[key] = obj;
+         this.setState(newState);
+      });
    }
 
    /***************************************************************
@@ -31,16 +86,20 @@ class Routines extends Component {
     **************************************************************/
    render () {
       var { style, theme } = this.props;
-      var { styles } = this.state;
+      var { lists, styles } = this.state;
+
+      if (!lists) {
+         return <Loading theme={theme}/>;
+      }
 
       return (
          <View style={style}>
             <ScrollView keyboardShouldPersistTaps>
                <List containerStyle={styles.list}>
                   {
-                     list.map((row, i) => (
+                     lists.map((row, i) => (
                         <ListItem
-                           avatar={{ uri: row.avatar_url }}
+                           avatar={{ uri: row.icon }}
                            containerStyle={styles.listItem}
                            titleStyle={styles.listItemTitle}
                            key={i}
