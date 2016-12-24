@@ -5,4 +5,4 @@ import App from 'doozy/app';
 /******************************************
  * APP INITIALIZATION
  *****************************************/
-AppRegistry.registerComponent('doozy', () => doozy);
+AppRegistry.registerComponent('doozy', () => App);
